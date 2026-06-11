@@ -62,6 +62,8 @@
     html {
       scroll-behavior: smooth;
       font-size: 16px;
+      overflow-x: hidden;
+      max-width: 100%;
     }
 
     body {
@@ -69,6 +71,7 @@
       background: var(--color-white);
       color: var(--color-charcoal);
       overflow-x: hidden;
+      max-width: 100%;
     }
 
     /* RTL/LTR mixed content */
@@ -340,7 +343,8 @@
     }
 
     .hero__brand-img {
-      width: clamp(320px, 45vw, 580px);
+      width: clamp(240px, 45vw, 580px);
+      max-width: 100%;
       /* big and bold on the hero */
       height: auto;
       display: block;
@@ -1162,6 +1166,14 @@
 
       #brand-video {
         padding-bottom: 32px;
+      }
+
+      .bvid__typing-line span {
+        white-space: normal;
+        width: auto;
+        border-right: none;
+        animation: none;
+        opacity: 1;
       }
     }
 
