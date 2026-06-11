@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sehatti — Download All Assets</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#0f1a14;color:#e8f0e9;padding:32px 24px;min-height:100vh}
+  h1{font-size:1.6rem;font-weight:700;color:#a8c5ad;margin-bottom:6px}
+  .sub{color:rgba(255,255,255,0.45);font-size:0.85rem;margin-bottom:32px}
+  .section{margin-bottom:36px}
+  .section-title{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6b8f71;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(107,143,113,0.25)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+  .asset-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;transition:border-color 0.2s}
+  .asset-card:hover{border-color:rgba(107,143,113,0.5)}
+  .asset-thumb{width:100%;height:130px;object-fit:cover;background:#1a2a1e;display:block}
+  .asset-thumb-placeholder{width:100%;height:130px;background:linear-gradient(135deg,#1a2a1e,#0e1a14);display:flex;align-items:center;justify-content:center;font-size:2rem}
+  .asset-info{padding:12px}
+  .asset-name{font-size:0.78rem;font-weight:600;color:#fff;margin-bottom:3px}
+  .asset-desc{font-size:0.7rem;color:rgba(255,255,255,0.45);margin-bottom:10px;line-height:1.4}
+  .asset-save{font-size:0.68rem;color:rgba(255,255,255,0.3);margin-bottom:10px;font-family:monospace;word-break:break-all;background:rgba(0,0,0,0.2);padding:4px 7px;border-radius:5px}
+  .btn-dl{display:block;text-align:center;background:#6b8f71;color:#fff;text-decoration:none;border-radius:8px;padding:7px 12px;font-size:0.74rem;font-weight:600;transition:background 0.18s}
+  .btn-dl:hover{background:#4a7050}
+  .note{background:rgba(201,169,110,0.1);border:1px solid rgba(201,169,110,0.3);border-radius:10px;padding:16px 20px;font-size:0.82rem;line-height:1.7;color:rgba(255,255,255,0.75);margin-bottom:28px}
+  .note strong{color:#c9a96e}
+  .step{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+  .step-num{background:#6b8f71;color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:1px}
+  .step-text{font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:1.55}
+  code{background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:0.78rem;font-family:monospace}
+</style>
+</head>
+<body>
+
+<h1>🌿 Sehatti — Asset Download Center</h1>
+<p class="sub">Download all images and assets used in the Sehatti website for self-hosting</p>
+
+<div class="note">
+  <strong>📋 How to use this page:</strong><br>
+  Right-click each image below → "Save image as" → save to the path shown under each asset.<br>
+  Then update <code>index.html</code> to use local paths instead of the Genspark CDN URLs.
+</div>
+
+<!-- HOW TO REPLACE PATHS -->
+<div class="section">
+  <div class="section-title">After Downloading — Update index.html</div>
+  <div class="step"><div class="step-num">1</div><div class="step-text">Create an <code>images/</code> folder next to your <code>index.html</code></div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text">Save each image to the path shown on its card below</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">In <code>index.html</code>, do Find &amp; Replace:<br>Replace <code>https://www.genspark.ai/api/files/s/FFuc4nh6</code> → <code>images/logo.png</code> (etc. for each file)</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-text">Test locally by opening <code>index.html</code> in your browser</div></div>
+</div>
+
+<!-- LOGO & BRAND -->
+<div class="section">
+  <div class="section-title">Logo &amp; Brand</div>
+  <div class="grid">
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/FFuc4nh6" alt="Sehatti Logo" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Sehatti Logo</div>
+        <div class="asset-desc">White logo — used in Navbar, Hero, Footer</div>
+        <div class="asset-save">Save as: images/logo.png</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/FFuc4nh6" download="logo.png" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO & BACKGROUNDS -->
+<div class="section">
+  <div class="section-title">Hero &amp; Backgrounds</div>
+  <div class="grid">
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/83AzKw4p" alt="Hero Background" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Hero Background</div>
+        <div class="asset-desc">Team photo — hero section full-bleed background</div>
+        <div class="asset-save">Save as: images/hero-bg.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/83AzKw4p" download="hero-bg.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="images/contact-bg.jpg" alt="Contact Background"/>
+      <div class="asset-info">
+        <div class="asset-name">Contact Section Background</div>
+        <div class="asset-desc">Office photo — contact/CTA section background (Unsplash)</div>
+        <div class="asset-save">Save as: images/contact-bg.jpg</div>
+        <a class="btn-dl" href="images/contact-bg.jpg" download="contact-bg.jpg">⬇ Download (already local)</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="images/brand-video-poster.jpg" alt="Video Poster"/>
+      <div class="asset-info">
+        <div class="asset-name">Brand Video Poster</div>
+        <div class="asset-desc">Video placeholder image — brand video section (Unsplash)</div>
+        <div class="asset-save">Save as: images/brand-video-poster.jpg</div>
+        <a class="btn-dl" href="images/brand-video-poster.jpg" download="brand-video-poster.jpg">⬇ Download (already local)</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ECOSYSTEM APP SCREENSHOTS -->
+<div class="section">
+  <div class="section-title">Ecosystem Section — App Screenshots</div>
+  <div class="grid">
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/6XL7lznF" alt="Assess App" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Ecosystem — Assess</div>
+        <div class="asset-desc">App screenshot for Step 01 Assess card</div>
+        <div class="asset-save">Save as: images/ecosystem-assess.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/6XL7lznF" download="ecosystem-assess.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/R0eSlIxi" alt="Measure App" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Ecosystem — Measure</div>
+        <div class="asset-desc">App screenshot for Step 02 Measure card</div>
+        <div class="asset-save">Save as: images/ecosystem-measure.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/R0eSlIxi" download="ecosystem-measure.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/QfBtrLnE" alt="Support App" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Ecosystem — Support</div>
+        <div class="asset-desc">App screenshot for Step 03 Support card</div>
+        <div class="asset-save">Save as: images/ecosystem-support.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/QfBtrLnE" download="ecosystem-support.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPERT PHOTOS -->
+<div class="section">
+  <div class="section-title">Expert Team Photos (11 Experts)</div>
+  <div class="grid">
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/NNtDi06r" alt="Beth Clay" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Beth Clay</div>
+        <div class="asset-desc">Financial Wellbeing Coach</div>
+        <div class="asset-save">images/experts/beth-clay.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/NNtDi06r" download="beth-clay.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/wjDg1Z19" alt="Dr. Omneya Omar" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Dr. Omneya Omar</div>
+        <div class="asset-desc">Wellbeing Advisor &amp; Facilitator</div>
+        <div class="asset-save">images/experts/omneya-omar.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/wjDg1Z19" download="omneya-omar.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/ErTwLr2D" alt="Daniela Nistor" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Daniela Nistor</div>
+        <div class="asset-desc">Wellbeing &amp; Leadership Coach</div>
+        <div class="asset-save">images/experts/daniela-nistor.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/ErTwLr2D" download="daniela-nistor.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/6U31AoQd" alt="Kareem Shawky" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Kareem Shawky</div>
+        <div class="asset-desc">Leadership &amp; HR Expert</div>
+        <div class="asset-save">images/experts/kareem-shawky.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/6U31AoQd" download="kareem-shawky.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/Bj3b7AJm" alt="Mostafa Nassef" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Mostafa Nassef</div>
+        <div class="asset-desc">HR, Training &amp; Wellbeing Specialist</div>
+        <div class="asset-save">images/experts/mostafa-nassef.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/Bj3b7AJm" download="mostafa-nassef.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/rwT4eK8F" alt="Gayu Lewis" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Gayu Lewis</div>
+        <div class="asset-desc">Integrative Health Coach &amp; Naturopath</div>
+        <div class="asset-save">images/experts/gayu-lewis.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/rwT4eK8F" download="gayu-lewis.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/QW8diDYZ" alt="Dr. Wael" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Dr. Wael</div>
+        <div class="asset-desc">Business Development Lead</div>
+        <div class="asset-save">images/experts/dr-wael.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/QW8diDYZ" download="dr-wael.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/DRvnnCyp" alt="Yasmeen Hamada" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Yasmeen Hamada</div>
+        <div class="asset-desc">Relationship Coach</div>
+        <div class="asset-save">images/experts/yasmeen-hamada.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/DRvnnCyp" download="yasmeen-hamada.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/5cAFnQyu" alt="Dr. Bassem Farhat" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Dr. Bassem Farhat</div>
+        <div class="asset-desc">Nutrition &amp; Clinical Training Specialist</div>
+        <div class="asset-save">images/experts/bassem-farhat.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/5cAFnQyu" download="bassem-farhat.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/3GKdhlbG" alt="Mostafa Mersal" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Mostafa Mersal</div>
+        <div class="asset-desc">Health &amp; Wellness Expert</div>
+        <div class="asset-save">images/experts/mostafa-mersal.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/3GKdhlbG" download="mostafa-mersal.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/1Takt0WP" alt="Ibrahim Merie" onerror="this.style.display='none'"/>
+      <div class="asset-info">
+        <div class="asset-name">Ibrahim Merie</div>
+        <div class="asset-desc">Wellbeing Data &amp; AI Specialist</div>
+        <div class="asset-save">images/experts/ibrahim-merie.jpg</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/1Takt0WP" download="ibrahim-merie.jpg" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTNER LOGOS -->
+<div class="section">
+  <div class="section-title">Partner / Client Logos</div>
+  <div class="grid">
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/T2l9deiA" alt="Gulf Tainer" onerror="this.style.display='none'" style="object-fit:contain;padding:20px;background:#fff"/>
+      <div class="asset-info">
+        <div class="asset-name">Gulf Tainer (GT)</div>
+        <div class="asset-desc">Partner logo — marquee strip</div>
+        <div class="asset-save">images/logos/gulf-tainer.png</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/T2l9deiA" download="gulf-tainer.png" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/RvMnFBWS" alt="GODO" onerror="this.style.display='none'" style="object-fit:contain;padding:20px;background:#fff"/>
+      <div class="asset-info">
+        <div class="asset-name">GODO</div>
+        <div class="asset-desc">Partner logo — marquee strip</div>
+        <div class="asset-save">images/logos/godo.png</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/RvMnFBWS" download="godo.png" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/IHM0v73M" alt="Eurodar" onerror="this.style.display='none'" style="object-fit:contain;padding:20px;background:#fff"/>
+      <div class="asset-info">
+        <div class="asset-name">The Eurodar</div>
+        <div class="asset-desc">Partner logo — marquee strip</div>
+        <div class="asset-save">images/logos/eurodar.png</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/IHM0v73M" download="eurodar.png" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+    <div class="asset-card">
+      <img class="asset-thumb" src="https://www.genspark.ai/api/files/s/ZAXoqDgs" alt="PSI" onerror="this.style.display='none'" style="object-fit:contain;padding:20px;background:#fff"/>
+      <div class="asset-info">
+        <div class="asset-name">PSI</div>
+        <div class="asset-desc">Partner logo — marquee strip</div>
+        <div class="asset-save">images/logos/psi.png</div>
+        <a class="btn-dl" href="https://www.genspark.ai/api/files/s/ZAXoqDgs" download="psi.png" target="_blank">⬇ Download</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO -->
+<div class="section">
+  <div class="section-title">Videos</div>
+  <div class="note" style="margin-bottom:0">
+    <strong>⚠️ Brand Video not included</strong><br>
+    The brand video placeholder (<code>YOUR_VIDEO_URL_HERE.mp4</code>) needs to be replaced with your real video file.<br>
+    Upload your MP4 video to your hosting server and update the <code>src</code> in <code>index.html</code>.
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sehatti — Build Your Project ZIP</title>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',sans-serif;background:#0f1923;color:#e8e0d0;min-height:100vh;padding:30px 16px}
+  .wrap{max-width:860px;margin:0 auto}
+  h1{font-size:2rem;font-weight:700;color:#c9a96e;margin-bottom:6px}
+  .sub{color:#8a9bb0;margin-bottom:32px;font-size:.95rem}
+  /* TECH STACK TABLE */
+  .card{background:#1a2332;border:1px solid #2a3a4a;border-radius:14px;padding:24px;margin-bottom:24px}
+  .card h2{font-size:1.15rem;font-weight:600;color:#c9a96e;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+  table{width:100%;border-collapse:collapse;font-size:.88rem}
+  th{background:#0f1923;color:#8a9bb0;text-align:left;padding:9px 12px;font-weight:600;border-bottom:1px solid #2a3a4a}
+  td{padding:9px 12px;border-bottom:1px solid #1e2d3d;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.78rem;font-weight:600}
+  .badge-green{background:#1a3a1a;color:#5dba6e}
+  .badge-blue{background:#0d2035;color:#5aaedc}
+  .badge-gold{background:#2a1f0a;color:#c9a96e}
+  /* HOSTING STEPS */
+  .host-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .host-card{background:#0f1923;border:1px solid #2a3a4a;border-radius:10px;padding:16px}
+  .host-card h3{color:#c9a96e;font-size:.95rem;margin-bottom:8px}
+  .host-card ol{padding-left:18px;font-size:.84rem;line-height:1.8;color:#bcc8d4}
+  .host-card code{background:#1a2332;padding:1px 5px;border-radius:4px;font-size:.82rem;color:#5aaedc}
+  /* ASSET GRID */
+  .asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+  .asset-item{background:#0f1923;border:1px solid #2a3a4a;border-radius:10px;overflow:hidden;text-align:center}
+  .asset-item img{width:100%;height:100px;object-fit:cover;display:block;background:#0a1018}
+  .asset-info{padding:8px 10px}
+  .asset-name{font-size:.78rem;color:#8a9bb0;word-break:break-all;margin-bottom:4px}
+  .asset-save{font-size:.76rem;color:#c9a96e;font-family:monospace}
+  /* BIG BUTTON */
+  .zip-btn{display:block;width:100%;padding:18px;border-radius:12px;border:none;background:linear-gradient(135deg,#6b8f71,#4a7050);color:#fff;font-size:1.15rem;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:transform .15s,box-shadow .15s;margin-bottom:12px}
+  .zip-btn:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(107,143,113,.4)}
+  .zip-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  /* PROGRESS */
+  #progress-wrap{display:none;margin-bottom:24px}
+  .prog-bar-bg{background:#0f1923;border-radius:20px;height:14px;overflow:hidden;margin-bottom:8px}
+  .prog-bar{height:100%;background:linear-gradient(90deg,#6b8f71,#c9a96e);width:0%;transition:width .3s;border-radius:20px}
+  #prog-label{font-size:.88rem;color:#8a9bb0;text-align:center}
+  #log{background:#0f1923;border:1px solid #2a3a4a;border-radius:8px;padding:14px;max-height:180px;overflow-y:auto;font-size:.8rem;font-family:monospace;color:#6a8a6a;line-height:1.7}
+  /* MANUAL DL */
+  .manual-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1e2d3d;font-size:.85rem}
+  .manual-row:last-child{border-bottom:none}
+  .manual-row a{color:#5aaedc;text-decoration:none;font-size:.82rem;padding:3px 10px;border:1px solid #2a4a6a;border-radius:6px}
+  .manual-row a:hover{background:#1a2f42}
+  .manual-path{font-family:monospace;color:#c9a96e;font-size:.8rem;flex:1}
+  .section-tag{display:inline-block;font-size:.7rem;padding:1px 7px;border-radius:20px;background:#1a2d1a;color:#6dba7e;margin-right:6px;font-weight:600}
+  .note{background:#1a2a0a;border:1px solid #3a5a1a;border-radius:8px;padding:12px 16px;font-size:.85rem;color:#8aba6e;margin-top:12px;line-height:1.7}
+  .note strong{color:#c9a96e}
+  .step-notice{background:#1a1a2a;border:1px solid #2a2a5a;border-radius:8px;padding:14px 16px;font-size:.85rem;color:#9a9aca;margin-bottom:20px;line-height:1.8}
+  .step-notice strong{color:#9aabdc}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>📦 Sehatti — Project Package Builder</h1>
+  <p class="sub">Build a complete ZIP of all code + assets, or download images individually. No server needed — everything runs in your browser.</p>
+
+  <!-- ══════════════════ TECH STACK ══════════════════ -->
+  <div class="card">
+    <h2>🧱 Tech Stack</h2>
+    <table>
+      <thead><tr><th>Layer</th><th>Technology</th><th>Version</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>HTML</td><td>HTML5</td><td>—</td><td>Single file <code>index.html</code>, semantic tags</td></tr>
+        <tr><td>CSS</td><td>CSS3 (inline)</td><td>—</td><td>Custom properties, Flexbox, Grid, animations</td></tr>
+        <tr><td>JavaScript</td><td>Vanilla ES6+</td><td>—</td><td>No framework, no bundler, no build step</td></tr>
+        <tr><td>Icons</td><td>Font Awesome</td><td>6.5.0</td><td>Loaded via jsDelivr CDN</td></tr>
+        <tr><td>Fonts</td><td>Google Fonts</td><td>—</td><td>Inter (EN) + Noto Kufi Arabic (AR)</td></tr>
+        <tr><td>Database</td><td colspan="3"><span class="badge badge-green">✅ NONE — fully static</span> No DB, no backend, no server process</td></tr>
+        <tr><td>Chatbot</td><td>Hardcoded JS KB</td><td>—</td><td>40 Q&amp;As in a JS object inside index.html, zero API calls</td></tr>
+        <tr><td>Contact Form</td><td>Front-end only</td><td>—</td><td>Needs Formspree / EmailJS / Netlify Forms to send email</td></tr>
+        <tr><td>Hosting req.</td><td>Any static host</td><td>—</td><td>Netlify · Vercel · GitHub Pages · cPanel · AWS S3</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════════ HOSTING GUIDE ══════════════════ -->
+  <div class="card">
+    <h2>🚀 Hosting Guide — 5 Options</h2>
+    <div class="host-grid">
+
+      <div class="host-card">
+        <h3>⚡ Netlify (Recommended)</h3>
+        <ol>
+          <li>Go to <a href="https://netlify.com" target="_blank" style="color:#5aaedc">netlify.com</a></li>
+          <li>Sign up / Log in (free)</li>
+          <li>Drag &amp; drop your project folder onto the deploy zone</li>
+          <li>Site is live instantly at <code>*.netlify.app</code></li>
+          <li>Add custom domain in Site Settings</li>
+        </ol>
+      </div>
+
+      <div class="host-card">
+        <h3>▲ Vercel</h3>
+        <ol>
+          <li>Go to <a href="https://vercel.com" target="_blank" style="color:#5aaedc">vercel.com</a></li>
+          <li>Click "Add New → Project"</li>
+          <li>Upload folder or connect GitHub repo</li>
+          <li>Framework: <code>Other (static)</code></li>
+          <li>Deploy — live at <code>*.vercel.app</code></li>
+        </ol>
+      </div>
+
+      <div class="host-card">
+        <h3>🐙 GitHub Pages</h3>
+        <ol>
+          <li>Create a GitHub repo</li>
+          <li>Upload all project files</li>
+          <li>Go to Settings → Pages</li>
+          <li>Source: <code>main</code> branch, <code>/root</code></li>
+          <li>Live at <code>username.github.io/repo</code></li>
+        </ol>
+      </div>
+
+      <div class="host-card">
+        <h3>🌐 cPanel / Shared Hosting</h3>
+        <ol>
+          <li>Login to cPanel</li>
+          <li>Open File Manager</li>
+          <li>Navigate to <code>public_html/</code></li>
+          <li>Upload all files (keep folder structure)</li>
+          <li>Visit your domain — done</li>
+        </ol>
+      </div>
+
+      <div class="host-card">
+        <h3>☁️ AWS S3</h3>
+        <ol>
+          <li>Create S3 bucket (same name as domain)</li>
+          <li>Enable "Static website hosting"</li>
+          <li>Set <code>index.html</code> as index document</li>
+          <li>Make bucket public (bucket policy)</li>
+          <li>Upload all files via AWS Console</li>
+          <li>Optional: add CloudFront CDN</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <div class="note" style="margin-top:16px">
+      <strong>Required versions:</strong> None — this is a plain HTML file. Any web server that can serve static files works. No Node.js, no PHP, no Python, no database.<br>
+      <strong>SSL/HTTPS:</strong> Netlify &amp; Vercel give free SSL automatically. cPanel: use Let's Encrypt from cPanel &gt; SSL/TLS. AWS: use CloudFront + ACM certificate.
+    </div>
+  </div>
+
+  <!-- ══════════════════ ZIP BUILDER ══════════════════ -->
+  <div class="card">
+    <h2>📦 Build &amp; Download Your ZIP</h2>
+    <div class="step-notice">
+      <strong>How it works:</strong> Click the button below. Your browser will:<br>
+      1. Fetch <code>index.html</code> + all guide files from this project<br>
+      2. Try to fetch each image (some may be blocked by CORS — those get skipped with a note)<br>
+      3. Package everything into a <code>sehatti-project.zip</code> and download it automatically<br><br>
+      <strong>Note on images:</strong> Genspark CDN images use HTTP 302 redirects which some browsers block. If any image fails, use the <em>Manual Download</em> section below — then add them to the ZIP manually.
+    </div>
+
+    <button class="zip-btn" id="buildBtn" onclick="buildZip()">
+      ⬇️ Build & Download sehatti-project.zip
+    </button>
+
+    <div id="progress-wrap">
+      <div class="prog-bar-bg"><div class="prog-bar" id="progBar"></div></div>
+      <div id="prog-label">Preparing…</div>
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ MANUAL DOWNLOAD ══════════════════ -->
+  <div class="card">
+    <h2>🖼️ Manual Image Download</h2>
+    <p style="font-size:.86rem;color:#8a9bb0;margin-bottom:16px">If the auto-ZIP fails for any image, right-click each thumbnail → "Save image as…" and save it to the path shown.</p>
+
+    <div class="asset-grid" id="thumbGrid"></div>
+
+    <div class="note" style="margin-top:16px">
+      <strong>After saving images manually:</strong> Open <code>index.html</code> in VS Code (or Notepad++), use Find &amp; Replace (Ctrl+H) with the entries in <code>assets/LOCAL_PATHS_PATCH.md</code> to switch all CDN URLs to local paths.
+    </div>
+  </div>
+
+  <!-- ══════════════════ FILE STRUCTURE ══════════════════ -->
+  <div class="card">
+    <h2>📁 Recommended Folder Structure (after local asset download)</h2>
+    <pre style="background:#0f1923;padding:16px;border-radius:8px;font-size:.82rem;color:#8acca8;line-height:1.8;overflow-x:auto">sehatti-website/
+├── index.html                     ← complete website (single file)
+├── SEHATTI_TECH_GUIDE.md          ← full tech + hosting guide
+├── assets/
+│   ├── BUILD_YOUR_ZIP.html        ← this page
+│   ├── LOCAL_PATHS_PATCH.md       ← find/replace map for local images
+│   ├── DOWNLOAD_ASSETS.html       ← original asset download page
+│   └── images/
+│       ├── logo.png
+│       ├── hero-bg.jpg
+│       ├── ecosystem-assess.jpg
+│       ├── ecosystem-measure.jpg
+│       ├── ecosystem-support.jpg
+│       ├── contact-bg.jpg         ✅ already downloaded
+│       ├── brand-video-poster.jpg ✅ already downloaded
+│       ├── experts/
+│       │   ├── beth-clay.jpg
+│       │   ├── omneya-omar.jpg
+│       │   ├── daniela-nistor.jpg
+│       │   ├── kareem-shawky.jpg
+│       │   ├── mostafa-nassef.jpg
+│       │   ├── gayu-lewis.jpg
+│       │   ├── dr-wael.jpg
+│       │   ├── yasmeen-hamada.jpg
+│       │   ├── bassem-farhat.jpg
+│       │   ├── mostafa-mersal.jpg
+│       │   └── ibrahim-merie.jpg
+│       └── logos/
+│           ├── gulf-tainer.png
+│           ├── godo.png
+│           ├── eurodar.png
+│           └── psi.png
+└── videos/
+    └── brand-video.mp4            ← add your own video file here</pre>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Asset manifest ────────────────────────────────────────────────
+const ASSETS = [
+  // Core files (fetched from same origin)
+  { type:'text', src:'../index.html',                   zip:'sehatti-project/index.html',                         label:'index.html (full website)' },
+  { type:'text', src:'../SEHATTI_TECH_GUIDE.md',        zip:'sehatti-project/SEHATTI_TECH_GUIDE.md',              label:'Tech Guide (MD)' },
+  { type:'text', src:'LOCAL_PATHS_PATCH.md',            zip:'sehatti-project/assets/LOCAL_PATHS_PATCH.md',        label:'Local Paths Patch' },
+  { type:'text', src:'BUILD_YOUR_ZIP.html',             zip:'sehatti-project/assets/BUILD_YOUR_ZIP.html',         label:'This page' },
+  { type:'text', src:'DOWNLOAD_ASSETS.html',            zip:'sehatti-project/assets/DOWNLOAD_ASSETS.html',        label:'Download Assets page' },
+
+  // Already-downloaded local images
+  { type:'binary', src:'images/contact-bg.jpg',         zip:'sehatti-project/assets/images/contact-bg.jpg',      label:'contact-bg.jpg ✅' },
+  { type:'binary', src:'images/brand-video-poster.jpg', zip:'sehatti-project/assets/images/brand-video-poster.jpg', label:'brand-video-poster.jpg ✅' },
+
+  // Genspark CDN images (may be blocked by CORS)
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/FFuc4nh6',  zip:'sehatti-project/assets/images/logo.png',                  label:'logo.png', thumb:true, saveas:'images/logo.png' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/83AzKw4p',  zip:'sehatti-project/assets/images/hero-bg.jpg',               label:'hero-bg.jpg', thumb:true, saveas:'images/hero-bg.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/6XL7lznF',  zip:'sehatti-project/assets/images/ecosystem-assess.jpg',      label:'ecosystem-assess.jpg', thumb:true, saveas:'images/ecosystem-assess.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/R0eSlIxi',  zip:'sehatti-project/assets/images/ecosystem-measure.jpg',     label:'ecosystem-measure.jpg', thumb:true, saveas:'images/ecosystem-measure.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/QfBtrLnE',  zip:'sehatti-project/assets/images/ecosystem-support.jpg',     label:'ecosystem-support.jpg', thumb:true, saveas:'images/ecosystem-support.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/NNtDi06r',  zip:'sehatti-project/assets/images/experts/beth-clay.jpg',     label:'beth-clay.jpg', thumb:true, saveas:'images/experts/beth-clay.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/wjDg1Z19',  zip:'sehatti-project/assets/images/experts/omneya-omar.jpg',   label:'omneya-omar.jpg', thumb:true, saveas:'images/experts/omneya-omar.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/ErTwLr2D',  zip:'sehatti-project/assets/images/experts/daniela-nistor.jpg',label:'daniela-nistor.jpg', thumb:true, saveas:'images/experts/daniela-nistor.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/6U31AoQd',  zip:'sehatti-project/assets/images/experts/kareem-shawky.jpg', label:'kareem-shawky.jpg', thumb:true, saveas:'images/experts/kareem-shawky.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/Bj3b7AJm',  zip:'sehatti-project/assets/images/experts/mostafa-nassef.jpg',label:'mostafa-nassef.jpg', thumb:true, saveas:'images/experts/mostafa-nassef.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/rwT4eK8F',  zip:'sehatti-project/assets/images/experts/gayu-lewis.jpg',    label:'gayu-lewis.jpg', thumb:true, saveas:'images/experts/gayu-lewis.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/QW8diDYZ',  zip:'sehatti-project/assets/images/experts/dr-wael.jpg',       label:'dr-wael.jpg', thumb:true, saveas:'images/experts/dr-wael.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/DRvnnCyp',  zip:'sehatti-project/assets/images/experts/yasmeen-hamada.jpg',label:'yasmeen-hamada.jpg', thumb:true, saveas:'images/experts/yasmeen-hamada.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/5cAFnQyu',  zip:'sehatti-project/assets/images/experts/bassem-farhat.jpg', label:'bassem-farhat.jpg', thumb:true, saveas:'images/experts/bassem-farhat.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/3GKdhlbG',  zip:'sehatti-project/assets/images/experts/mostafa-mersal.jpg',label:'mostafa-mersal.jpg', thumb:true, saveas:'images/experts/mostafa-mersal.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/1Takt0WP',  zip:'sehatti-project/assets/images/experts/ibrahim-merie.jpg', label:'ibrahim-merie.jpg', thumb:true, saveas:'images/experts/ibrahim-merie.jpg' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/T2l9deiA',  zip:'sehatti-project/assets/images/logos/gulf-tainer.png',     label:'gulf-tainer.png', thumb:true, saveas:'images/logos/gulf-tainer.png' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/RvMnFBWS',  zip:'sehatti-project/assets/images/logos/godo.png',            label:'godo.png', thumb:true, saveas:'images/logos/godo.png' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/IHM0v73M',  zip:'sehatti-project/assets/images/logos/eurodar.png',         label:'eurodar.png', thumb:true, saveas:'images/logos/eurodar.png' },
+  { type:'binary', src:'https://www.genspark.ai/api/files/s/ZAXoqDgs',  zip:'sehatti-project/assets/images/logos/psi.png',             label:'psi.png', thumb:true, saveas:'images/logos/psi.png' },
+];
+
+// ── Build thumbnail grid ──────────────────────────────────────────
+const grid = document.getElementById('thumbGrid');
+ASSETS.filter(a => a.thumb).forEach(a => {
+  const item = document.createElement('div');
+  item.className = 'asset-item';
+  item.innerHTML = `
+    <a href="${a.src}" target="_blank">
+      <img src="${a.src}" alt="${a.label}" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'160\\' height=\\'100\\'%3E%3Crect fill=\\'%230a1018\\' width=\\'160\\' height=\\'100\\'/%3E%3Ctext fill=\\'%23445\\' x=\\'80\\' y=\\'55\\' text-anchor=\\'middle\\' font-size=\\'11\\'%3ECORS blocked%3C/text%3E%3C/svg%3E'"/>
+    </a>
+    <div class="asset-info">
+      <div class="asset-name">${a.label}</div>
+      <div class="asset-save">save → ${a.saveas}</div>
+    </div>`;
+  grid.appendChild(item);
+});
+
+// ── ZIP builder ───────────────────────────────────────────────────
+let building = false;
+const progBar  = document.getElementById('progBar');
+const progLabel= document.getElementById('prog-label');
+const logDiv   = document.getElementById('log');
+
+function logLine(msg, ok=true){
+  logDiv.innerHTML += `<span style="color:${ok?'#6dba7e':'#e08a6a'}">${msg}</span>\n`;
+  logDiv.scrollTop = logDiv.scrollHeight;
+}
+function setProgress(n, total, msg){
+  const pct = Math.round((n/total)*100);
+  progBar.style.width = pct+'%';
+  progLabel.textContent = `${msg} (${n}/${total}) — ${pct}%`;
+}
+
+async function buildZip(){
+  if(building) return;
+  building = true;
+  const btn = document.getElementById('buildBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Building ZIP…';
+
+  document.getElementById('progress-wrap').style.display = 'block';
+  logDiv.innerHTML = '';
+
+  const zip = new JSZip();
+  let done=0, failed=[];
+
+  for(let i=0; i<ASSETS.length; i++){
+    const a = ASSETS[i];
+    setProgress(i+1, ASSETS.length, `Fetching ${a.label}`);
+    try{
+      if(a.type === 'text'){
+        const r = await fetch(a.src, {cache:'no-cache'});
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
+        const txt = await r.text();
+        zip.file(a.zip, txt);
+        logLine(`✅ ${a.label}`);
+        done++;
+      } else {
+        const r = await fetch(a.src, {cache:'no-cache', mode:'cors'});
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
+        const buf = await r.arrayBuffer();
+        zip.file(a.zip, buf);
+        logLine(`✅ ${a.label} (${(buf.byteLength/1024).toFixed(0)} KB)`);
+        done++;
+      }
+    } catch(e){
+      logLine(`⚠️  SKIPPED ${a.label} — ${e.message}`, false);
+      failed.push(a);
+    }
+    await new Promise(r => setTimeout(r, 80)); // small delay between fetches
+  }
+
+  // Add a README
+  zip.file('sehatti-project/README.txt',
+`SEHATTI WEBSITE — PROJECT PACKAGE
+===================================
+Generated: ${new Date().toLocaleString()}
+
+CONTENTS
+--------
+index.html               — Complete website (single file, ~290 KB)
+SEHATTI_TECH_GUIDE.md    — Full tech stack + hosting guide
+assets/
+  BUILD_YOUR_ZIP.html    — This package builder page
+  LOCAL_PATHS_PATCH.md   — Find/replace map: CDN → local image paths
+  DOWNLOAD_ASSETS.html   — Visual asset download page
+  images/                — Downloaded images (see below)
+
+TECH STACK
+----------
+HTML5 + CSS3 + Vanilla JavaScript — NO framework, NO database, NO backend.
+CDN: Font Awesome 6.5.0 (jsDelivr), Google Fonts (Inter + Noto Kufi Arabic)
+Chatbot: Hardcoded JS knowledge base — 40 Q&As, zero API calls
+
+HOSTING — JUST DROP THE FILES
+------------------------------
+Works on: Netlify (drag & drop), Vercel, GitHub Pages, cPanel/public_html, AWS S3
+No Node.js, PHP, MySQL or any server software needed.
+
+IMAGES
+------
+${done} of ${ASSETS.length} files packaged.
+${failed.length > 0 ? 'MANUALLY DOWNLOAD these (CORS blocked):\n' + failed.map(f => '  - ' + f.label + '  →  ' + (f.saveas||f.zip)).join('\n') : 'All files packaged successfully!'}
+
+TO USE LOCAL IMAGES
+-------------------
+After downloading skipped images, open index.html in VS Code and
+use Find & Replace (Ctrl+H) with the entries in assets/LOCAL_PATHS_PATCH.md
+`);
+
+  setProgress(ASSETS.length, ASSETS.length, 'Generating ZIP…');
+  logLine(`\n📦 Packaging ZIP — ${done} files included, ${failed.length} skipped…`);
+
+  try{
+    const blob = await zip.generateAsync({type:'blob', compression:'DEFLATE', compressionOptions:{level:6}},
+      meta => { progBar.style.width = meta.percent.toFixed(0)+'%'; });
+    saveAs(blob, 'sehatti-project.zip');
+    progLabel.textContent = `✅ Done! ZIP downloaded (${(blob.size/1024/1024).toFixed(1)} MB)`;
+    btn.textContent = '✅ ZIP Downloaded!';
+    btn.style.background = 'linear-gradient(135deg,#2a5a2a,#1a4a1a)';
+    logLine(`\n✅ sehatti-project.zip saved to your Downloads folder.`);
+    if(failed.length>0){
+      logLine(`\n⚠️  ${failed.length} image(s) were skipped (CORS/redirect). Use the Manual Download grid above to save them, then add to the ZIP manually.`, false);
+    }
+  } catch(err){
+    logLine(`❌ ZIP generation failed: ${err.message}`, false);
+    btn.textContent = '❌ Failed — Try Again';
+    btn.disabled = false;
+  }
+  building = false;
+}
+</script>
+</body>
+</html>
