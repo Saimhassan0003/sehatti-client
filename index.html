@@ -5107,15 +5107,20 @@
 
     /* ── Responsive Contact ── */
     @media (max-width: 900px) {
+      #contact {
+        min-height: auto;
+      }
+
       .contact__wrap {
         grid-template-columns: 1fr;
         min-height: auto;
       }
 
       .contact__left {
-        padding: clamp(72px, 10vw, 100px) clamp(24px, 5vw, 56px) clamp(32px, 5vw, 48px);
+        padding: 80px 24px 40px;
         align-items: center;
         text-align: center;
+        justify-content: flex-start;
       }
 
       .contact__subtitle {
@@ -5123,11 +5128,95 @@
       }
 
       .contact__proof {
-        align-items: center;
+        align-items: flex-start;
+        text-align: left;
+        width: 100%;
+        max-width: 480px;
+      }
+
+      .contact__details {
+        align-self: flex-start;
+        width: 100%;
+        max-width: 480px;
+      }
+
+      .contact__socials {
+        align-self: flex-start;
       }
 
       .contact__right {
-        padding: 0 clamp(20px, 5vw, 48px) clamp(72px, 10vw, 100px);
+        padding: 0 24px 80px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #contact {
+        min-height: auto;
+      }
+
+      .contact__wrap {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .contact__left {
+        padding: 70px 16px 32px;
+      }
+
+      .contact__title {
+        font-size: clamp(1.8rem, 9vw, 2.6rem);
+      }
+
+      .contact__quote-mark {
+        font-size: 5rem;
+      }
+
+      .contact__right {
+        padding: 0 12px 60px;
+      }
+
+      .contact__form-wrap {
+        padding: 24px 16px 28px;
+        border-radius: 20px;
+        margin: 0;
+      }
+
+      .contact__form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .contact__form {
+        gap: 12px;
+      }
+
+      .contact__input,
+      .contact__select {
+        padding: 12px 14px;
+        font-size: 16px;
+      }
+
+      .contact__label {
+        font-size: 0.68rem;
+      }
+
+      .contact__submit {
+        padding: 16px 20px;
+        font-size: 0.95rem;
+      }
+
+      .contact__form-title {
+        font-size: 1.2rem;
+      }
+
+      .contact__response {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .contact__proof-item {
+        flex-direction: row;
+        gap: 12px;
       }
     }
 
@@ -7968,25 +8057,49 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Sending…</span> <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
 
-        // ── API URL: Vercel serverless function (same domain) ──
-        const API_URL = '/api/contact';
-
         try {
-          const response = await fetch(API_URL, {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify(payload),
-          });
-
-          const result = await response.json();
-
-          if (result.success) {
-            form.style.display = 'none';
-            successBox.classList.add('visible');
-            successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          } else {
-            throw new Error(result.message || 'Server error');
+          // ── Try Vercel serverless API first ──
+          let success = false;
+          try {
+            const response = await fetch('/api/contact', {
+              method:  'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body:    JSON.stringify(payload),
+            });
+            if (response.ok) {
+              const result = await response.json();
+              if (result.success) success = true;
+              else if (result.message) throw new Error(result.message);
+            }
+          } catch (apiErr) {
+            // API not available — use FormSubmit.co as fallback
           }
+
+          if (!success) {
+            // ── Fallback: FormSubmit.co (works without any backend) ──
+            const formData = new FormData();
+            formData.append('name', payload.fullName);
+            formData.append('email', payload.email);
+            formData.append('phone', payload.phone || '');
+            formData.append('country', payload.country);
+            formData.append('organisation', payload.organisation);
+            formData.append('orgSize', payload.orgSize);
+            formData.append('_subject', 'New Consultation Request — Sehatti');
+            formData.append('_captcha', 'false');
+            formData.append('_template', 'table');
+            formData.append('_next', window.location.href);
+            const fbRes = await fetch('https://formsubmit.co/ajax/info@sehatti.com', {
+              method: 'POST',
+              body: formData,
+            });
+            const fbResult = await fbRes.json();
+            if (fbResult.success === 'true' || fbResult.success === true) success = true;
+            else throw new Error('Unable to send. Please email info@sehatti.com directly.');
+          }
+
+          form.style.display = 'none';
+          successBox.classList.add('visible');
+          successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         } catch (err) {
           // Re-enable button and show an inline error
@@ -7994,7 +8107,7 @@
           submitBtn.innerHTML = '<span>Request My Consultation</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
           const errMsg = err.message && err.message !== 'Failed to fetch'
             ? err.message
-            : 'Unable to send your request. Please email us directly at info@sehatti.com';
+            : 'Unable to send. Please email us at info@sehatti.com';
           let alertEl = document.getElementById('cf-send-error');
           if (!alertEl) {
             alertEl = document.createElement('p');
