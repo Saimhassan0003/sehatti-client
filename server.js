@@ -16,9 +16,20 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 
 // ── Middleware ──
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://sehatti-client.vercel.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+  ],
+  methods: ['GET', 'POST'],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ── Health check for Railway ──
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Serve the static index.html at root
 app.use(express.static(path.join(__dirname)));
@@ -41,15 +52,13 @@ const gmailTransporter = nodemailer.createTransport({
 // ============================================================
 const companyTransporter = nodemailer.createTransport({
   host:   process.env.SMTP_HOST,
-  port:   parseInt(process.env.SMTP_PORT, 10),
-  secure: process.env.SMTP_USE_SSL === 'true',
+  port:   parseInt(process.env.SMTP_PORT || '587', 10),
+  secure: process.env.SMTP_USE_SSL === 'false',
   auth: {
     user: process.env.SMTP_USERNAME,
     pass: process.env.SMTP_PASSWORD,
   },
-  tls: {
-    rejectUnauthorized: true,
-  },
+  tls: { rejectUnauthorized: false },
 });
 
 // ── Verify both transporters on startup ──
