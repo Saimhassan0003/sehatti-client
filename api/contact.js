@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 
-// Gmail Transporter
 const gmailTransporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -9,22 +8,10 @@ const gmailTransporter = nodemailer.createTransport({
   },
 });
 
-// Zoho SMTP Transporter — FIXED: secure based on port 465
-const companyTransporter = nodemailer.createTransport({
-  host:   process.env.SMTP_HOST,
-  port:   parseInt(process.env.SMTP_PORT || '465', 10),
-  secure: process.env.SMTP_USE_SSL === 'true',   // ✅ FIXED (was === 'false')
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
-  },
-  tls: { rejectUnauthorized: false },
-});
-
 function detailRow(label, value) {
   return `
     <tr style="border-bottom:1px solid #f0f0f0;">
-      <td style="padding:12px 16px;font-size:13px;font-weight:600;color:#888;white-space:nowrap;width:180px;background:#fafafa;border-radius:4px;">${label}</td>
+      <td style="padding:12px 16px;font-size:13px;font-weight:600;color:#888;white-space:nowrap;width:180px;background:#fafafa;">${label}</td>
       <td style="padding:12px 16px;font-size:14px;color:#222;font-weight:500;">${value}</td>
     </tr>`;
 }
@@ -69,8 +56,8 @@ module.exports = async function handler(req, res) {
   }
 
   const adminMail = {
-    from:    process.env.GMAIL_USER,
-    to:      process.env.GMAIL_USER,
+    from: process.env.GMAIL_USER,
+    to: process.env.GMAIL_USER,
     replyTo: email,
     subject: 'New Consultation Request — Sehatti',
     html: `<!DOCTYPE html>
@@ -120,8 +107,8 @@ module.exports = async function handler(req, res) {
   };
 
   const userMail = {
-    from:    `"${process.env.SMTP_FROM_NAME}" <${process.env.SMTP_FROM_EMAIL}>`,
-    to:      email,
+    from: `"Sehatti" <${process.env.GMAIL_USER}>`,
+    to: email,
     subject: 'Your Consultation Request Has Been Received — Sehatti',
     html: `<!DOCTYPE html>
 <html lang="en">
@@ -141,8 +128,8 @@ module.exports = async function handler(req, res) {
           <td style="padding:40px;">
             <p style="margin:0 0 18px;font-size:16px;color:#333;line-height:1.7;">Dear <strong>${fullName}</strong>,</p>
             <p style="margin:0 0 18px;font-size:15px;color:#555;line-height:1.8;">Thank you for reaching out to <strong>Sehatti!</strong></p>
-            <p style="margin:0 0 18px;font-size:15px;color:#555;line-height:1.8;">We have received your consultation request and a specialist will get back to you within <strong>24 hours</strong> with a tailored proposal for your organisation.</p>
-            <p style="margin:0 0 36px;font-size:15px;color:#555;line-height:1.8;">If you have any urgent questions, please feel free to contact us directly.</p>
+            <p style="margin:0 0 18px;font-size:15px;color:#555;line-height:1.8;">We have received your consultation request and a specialist will get back to you within <strong>24 hours</strong>.</p>
+            <p style="margin:0 0 36px;font-size:15px;color:#555;line-height:1.8;">If you have any urgent questions, feel free to contact us directly.</p>
             <table width="100%" cellpadding="24" cellspacing="0" style="background:#f0f7f2;border-radius:10px;">
               <tr><td>
                 <p style="margin:0 0 4px;font-size:15px;font-weight:700;color:#1A3A2A;">Best regards,</p>
@@ -168,21 +155,22 @@ module.exports = async function handler(req, res) {
   try {
     const [adminResult, userResult] = await Promise.allSettled([
       gmailTransporter.sendMail(adminMail),
-      companyTransporter.sendMail(userMail),
+      gmailTransporter.sendMail(userMail),
     ]);
 
     if (adminResult.status === 'rejected') {
-      console.warn('Admin Gmail failed:', adminResult.reason?.message);
+      console.warn('Admin email failed:', adminResult.reason?.message);
     }
 
     if (userResult.status === 'rejected') {
-      console.error('User Zoho email failed:', userResult.reason?.message);
-      return res.status(500).json({ success: false, message: 'Failed to send confirmation email. Please try again.' });
+      console.error('User email failed:', userResult.reason?.message);
+      return res.status(500).json({ success: false, message: 'Failed to send confirmation email.' });
     }
 
     return res.json({ success: true, message: 'Email sent successfully.' });
+
   } catch (err) {
     console.error('Email error:', err.message);
-    return res.status(500).json({ success: false, message: 'Failed to send email. Please try again.' });
+    return res.status(500).json({ success: false, message: 'Failed to send email.' });
   }
 };
