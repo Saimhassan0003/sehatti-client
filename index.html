@@ -7968,8 +7968,8 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Sending…</span> <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
 
-        // ── API URL: points to the deployed Railway backend ──
-        const API_URL = 'https://sehatti-server-production.up.railway.app/api/contact';
+        // ── API URL: Vercel serverless function (same domain) ──
+        const API_URL = '/api/contact';
 
         try {
           const response = await fetch(API_URL, {
