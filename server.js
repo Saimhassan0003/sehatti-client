@@ -50,10 +50,13 @@ const gmailTransporter = nodemailer.createTransport({
 //  TRANSPORTER 2 — Company SMTP (Zoho)
 //  Purpose : User confirmation → submitted email address
 // ============================================================
+const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
+const smtpSecure = smtpPort === 465 || process.env.SMTP_USE_SSL === 'true';
+
 const companyTransporter = nodemailer.createTransport({
   host:   process.env.SMTP_HOST,
-  port:   parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: process.env.SMTP_USE_SSL === 'false',
+  port:   smtpPort,
+  secure: smtpSecure,
   auth: {
     user: process.env.SMTP_USERNAME,
     pass: process.env.SMTP_PASSWORD,
