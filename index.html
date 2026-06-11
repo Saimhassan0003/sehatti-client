@@ -5134,11 +5134,128 @@
     @media (max-width: 560px) {
       .contact__form-row {
         grid-template-columns: 1fr;
+        gap: 12px;
       }
 
       .contact__form-wrap {
-        padding: 28px 20px;
-        border-radius: 20px;
+        padding: 24px 16px;
+        border-radius: 16px;
+        margin: 0 8px;
+      }
+
+      .contact__form {
+        gap: 14px;
+      }
+
+      .contact__input,
+      .contact__select {
+        padding: 13px 14px;
+        font-size: 0.9rem;
+      }
+
+      .contact__label {
+        font-size: 0.7rem;
+      }
+
+      .contact__submit {
+        padding: 15px 20px;
+        font-size: 0.9rem;
+      }
+
+      .contact__form-title {
+        font-size: 1.25rem;
+      }
+
+      .contact__left {
+        padding: 60px 20px 32px;
+      }
+
+      .contact__title {
+        font-size: clamp(2rem, 10vw, 2.8rem);
+      }
+
+      .contact__quote-mark {
+        font-size: clamp(80px, 22vw, 140px);
+      }
+
+      .contact__right {
+        padding: 0 16px 60px;
+      }
+
+      .contact__details {
+        align-items: center;
+        gap: 10px;
+      }
+
+      .contact__detail-text {
+        font-size: 0.82rem;
+      }
+
+      .contact__proof-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .contact__response {
+        justify-content: center;
+      }
+
+      .contact__socials {
+        justify-content: center;
+      }
+    }
+
+    /* ── Brand Video: mobile responsive ── */
+    @media (max-width: 768px) {
+      .bvid__container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .bvid__card {
+        aspect-ratio: 16 / 10;
+        border-radius: 16px;
+      }
+
+      .bvid__text {
+        padding: 0 4px;
+      }
+    }
+
+    /* ── Solutions: mobile tab overflow fix ── */
+    @media (max-width: 600px) {
+      .sol__tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 4px;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+
+      .sol__tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* ── Trust section: mobile ── */
+    @media (max-width: 600px) {
+      .trust__pillars {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .experts__track {
+        gap: 10px;
+      }
+
+      .expert-card {
+        flex: 0 0 clamp(160px, 50vw, 200px);
       }
     }
 
@@ -5368,7 +5485,7 @@
     <!-- Background: provided team photo -->
     <div class="hero__bg" aria-hidden="true">
       <img
-        src="assets/images/WhatsApp Image 2026-06-06 at 11.37.49 AM (1).jpeg"
+        src="assets/images/hero-bg.jpg"
         alt="Sehatti team – diverse GCC professionals in a modern office environment" loading="eager"
         fetchpriority="high" onerror="this.style.display='none'" />
     </div>
@@ -7851,8 +7968,11 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Sending…</span> <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>';
 
+        // ── API URL: points to the deployed Railway backend ──
+        const API_URL = 'https://sehatti-server-production.up.railway.app/api/contact';
+
         try {
-          const response = await fetch('/api/contact', {
+          const response = await fetch(API_URL, {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify(payload),
